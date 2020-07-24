@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
         <title>Media center - Web manager</title>
@@ -23,8 +24,18 @@
                     <div class='section'>
                         <h2>Bluetooth configuration</h2>
                         <h3>Devices</h3>
-                        <textarea id='bt-devices' class='custom' disabled style="resize:none"></textarea>
-                        <button id='bt-devices-refresh' class='btn btn-outline-light' data-route="{{ route('bluetooth.listDevices') }}">Rafraîchir</button>
+                        <div class='m-1'>
+                            <textarea id='bt-devices' class='from-control w-100' disabled style="resize:none" rows="10"></textarea>
+                        </div>
+                        <div class='d-flex justify-content-center'>
+                            <button id='bt-devices-refresh' class='btn btn-outline-light' data-route="{{ route('bluetooth.listDevices') }}">Rafraîchir</button>
+                            <div id='bt-devices-refresh-icon' class='ml-2' style='display:none'><img src='{{asset('img/loading.svg')}}' width="40"></img></div>
+                        </div>
+                        <h3>Actions<h3>
+                        <div class='m-1'>
+                            <button id='bt-mute' class='btn btn-outline-light ajax-trigger' data-action="{{route('bluetooth.disable')}}"><i class="fas fa-volume-mute"></i></button>
+                            <button id='bt-unmute' class='btn btn-outline-light ajax-trigger' data-action="{{route('bluetooth.enable')}}"><i class="fas fa-volume-up"></i></button>
+                        </div>
                     </div>
                 </div>
                 <div class='col-12 col-md-6'>
