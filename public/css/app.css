@@ -1,0 +1,6 @@
+.section {
+    border : 1px solid white;
+    margin-bottom: 30px;
+    padding: 10px;
+    min-height: 200px;
+}
