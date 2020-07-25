@@ -15,6 +15,24 @@
             <h1 class='text-center'>Web manager</h1>
             <hr class='my-4 bg-light'>
             <div class='info row'>
+                <div class='col-12'>
+                    <div class='line-section'>
+                        <h3 class='d-inline mr-2'>Auto-sync :</h3>
+                        <button id='sync-button' class='btn btn-light'>
+                            <div class='icon-container' title='Enabled'>
+                                <span class="fa-stack">
+                                  <i class="fas fa-sync-alt fa-stack-1x"></i>
+                                </span>
+                            </div>
+                            <div class='icon-container' title='Disabled' style='display:none'>
+                                <span class="fa-stack">
+                                  <i class="fas fa-sync-alt fa-stack-1x"></i>
+                                  <i class="fas fa-slash fa-stack-1x"></i>
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
                 <div class='col-12 col-md-6'>
                     <div class='section'>
                         <h2>Media configuration</h2>
@@ -23,18 +41,19 @@
                 <div class='col-12 col-md-6'>
                     <div class='section'>
                         <h2>Bluetooth configuration</h2>
-                        <h3>Devices</h3>
-                        <div class='m-1'>
-                            <textarea id='bt-devices' class='from-control w-100' disabled style="resize:none" rows="10"></textarea>
-                        </div>
-                        <div class='d-flex justify-content-center'>
-                            <button id='bt-devices-refresh' class='btn btn-outline-light' data-route="{{ route('bluetooth.listDevices') }}">Rafraîchir</button>
+                        <div class='d-flex'>
+                            <h3>Devices</h3>
                             <div id='bt-devices-refresh-icon' class='ml-2' style='display:none'><img src='{{asset('img/loading.svg')}}' width="40"></img></div>
+                        </div>
+                        <div class='m-1'>
+                            <textarea id='bt-devices' data-route="{{ route('bluetooth.listDevices') }}" class='from-control w-100' disabled style="resize:none" rows="10"></textarea>
                         </div>
                         <h3>Actions<h3>
                         <div class='m-1'>
-                            <button id='bt-mute' class='btn btn-outline-light ajax-trigger' data-action="{{route('bluetooth.disable')}}"><i class="fas fa-volume-mute"></i></button>
-                            <button id='bt-unmute' class='btn btn-outline-light ajax-trigger' data-action="{{route('bluetooth.enable')}}"><i class="fas fa-volume-up"></i></button>
+                            <div id='bt-status-button' data-route="{{route('bluetooth.status')}}">
+                                <button class='btn btn-outline-light action disable' data-action="{{ route('bluetooth.disable') }}" style='display:none'><i class="fas fa-volume-mute"></i></button>
+                                <button  class='btn btn-outline-light action enable' data-action="{{route('bluetooth.enable')}}"><i class="fas fa-volume-up"></i></button>
+                            </div>
                         </div>
                     </div>
                 </div>

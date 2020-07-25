@@ -28,6 +28,7 @@ Route::prefix('bluetooth')->name('bluetooth.')->group(function() {
     Route::post('disable', 'BluetoothController@mute')->name('disable');
     Route::post('enable', 'BluetoothController@unmute')->name('enable');
 
+    Route::get('status', 'BluetoothController@getStatus')->name('status');
     Route::get('devices', 'BluetoothController@listDevices')->name('listDevices');
     Route::post('deviceOperation', 'BluetoothController@doDeviceOperation')->name('deviceOperation');
 });

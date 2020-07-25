@@ -14,36 +14,42 @@ class BluetoothController extends Controller
     {
         $this->manager = new Manager(true, true);
         $this->manager->scanDevices();
-        usleep(1000000);
         $this->manager->updateBluetoothInfo();
         $bt = $this->manager->getBluetoothInfo();
         return response()->json($bt->getDevices());
     }
 
-    public function isMuted() : bool
+    //TODO: fix user permissions (launch PA service from http user ? manage to grant PA control to http user ?)
+    //TODO: Do regex search over the data
+    public function getPAStatus() : array
     {
-        $status = (new Command("pulseaudio-ctl full-status"))->execute();
+        $status = (new Command("pacmd list-sources"))->execute();
         var_dump($status);
-        list($volume, $sinkMuted, $sourceMuted) = explode(" ", $status);
-        return $sourceMuted == "yes";
+        return ["isMuted" => false, "id" => -1];
     }
 
-    private function toggleMute()
+    public function doMute(bool $mute) : void
     {
-        var_dump((new Command("pulseaudio-ctl mute-input"))->execute());
+        $id = $this->getPAStatus()['id'];
+        $mute = intval($mute);
+        (new Command("pacmd set-source-mute $id $mute"))->execute();
     }
 
     public function mute()
     {
-        if (! $this->isMuted())
-            $this->toggleMute();
+        $this->doMute(true);
         return response()->json(["error" => "no"]);
     }
 
     public function unmute()
     {
-        if (! $this->isMuted())
-            $this->toggleMute();
+        $this->doMute(false);
         return response()->json(["error" => "no"]);
+    }
+
+    public function getStatus()
+    {
+        $data = $this->getPAStatus();
+        return response()->json($data);
     }
 }
