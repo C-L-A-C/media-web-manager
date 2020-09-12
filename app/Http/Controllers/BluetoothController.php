@@ -23,7 +23,9 @@ class BluetoothController extends Controller
     //TODO: Do regex search over the data
     public function getPAStatus() : array
     {
-        $status = (new Command("pacmd list-sources"))->execute();
+        $home = env("SERVER_HOME", "/home/http");
+        (new Command("HOME=$home pulseaudio"))->execute();
+        $status = (new Command("HOME=$home pacmd list-sources"))->execute();
         var_dump($status);
         return ["isMuted" => false, "id" => -1];
     }

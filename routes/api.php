@@ -16,11 +16,19 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('media')->name('media.')->group(function() {
     Route::prefix('audio')->name('audio.')->group(function() {
-        Route::post('play', 'MediaController@play')->name('play');
-        Route::get('list', 'MediaController@list')->name('list');
-        Route::get('source', 'MediaController@getSource')->name('getSource');
-        Route::post('source', 'MediaController@setSources')->name('setSource');
-        Route::get('sources', 'MediaController@getAvailableSources')->name('getSourceList');
+        // Files
+        Route::get('files', 'MediaController@listFiles')->name('listFiles');
+
+        // Playlist
+        Route::get('playlist', 'MediaController@getPlaylist')->name('getPlaylist');
+        Route::post('song', 'MediaController@addSong')->name('addSong');
+        Route::delete('song', 'MediaController@removeSong')->name('removeSong');
+
+        //Set audio mode : bluetooth, playlist, none
+        Route::prefix('config')->name('config.')->group(function() {
+            Route::get('mode', 'MediaController@getMode')->name('getMode');
+            Route::put('mode', 'MediaController@setMode')->name('setMode');
+        });
     });
 });
 
@@ -38,7 +46,7 @@ Route::prefix('controls')->name('controls.')->group(function() {
     Route::get('status', 'PlaybackController@getStatus')->name('status');
     Route::post('volume/{}', 'PlaybackController@setVolume')->name('volume');
     Route::post('resume', 'PlaybackController@resume')->name('resume');
-    Route::post('resume', 'PlaybackController@pause')->name('pause');
+    Route::post('pause', 'PlaybackController@pause')->name('pause');
     Route::post('next', 'PlaybackController@next')->name('next');
     Route::post('previous', 'PlaybackController@previous')->name('previous');
 });
