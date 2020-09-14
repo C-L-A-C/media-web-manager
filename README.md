@@ -14,6 +14,8 @@ This can be done with the artisan command `setup:pulse`
 
 Restart pulseaudio
 
+Bluetooth : https://www.raspberrypi.org/forums/viewtopic.php?t=108581
+
 
 TODO:
 - Figure out if we need to autospawn or systemd/cron `pulseaudio -D`
