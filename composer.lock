@@ -1149,16 +1149,16 @@
         },
         {
             "name": "league/mime-type-detection",
-            "version": "1.4.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/mime-type-detection.git",
-                "reference": "fda190b62b962d96a069fcc414d781db66d65b69"
+                "reference": "ea2fbfc988bade315acd5967e6d02274086d0f28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/fda190b62b962d96a069fcc414d781db66d65b69",
-                "reference": "fda190b62b962d96a069fcc414d781db66d65b69",
+                "url": "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/ea2fbfc988bade315acd5967e6d02274086d0f28",
+                "reference": "ea2fbfc988bade315acd5967e6d02274086d0f28",
                 "shasum": ""
             },
             "require": {
@@ -1196,20 +1196,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-09T10:34:01+00:00"
+            "time": "2020-09-21T18:10:53+00:00"
         },
         {
             "name": "lecodeurdudimanche/php-bluetooth",
-            "version": "v0.4.2",
+            "version": "v0.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/LeCodeurDuDimanche/php-bluetooth.git",
-                "reference": "0d57ef618b3b2d24650c57176d7c91b0bf0a71ef"
+                "reference": "d13a8dd024e30b1bdb741d91f19818d1fe148afb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LeCodeurDuDimanche/php-bluetooth/zipball/0d57ef618b3b2d24650c57176d7c91b0bf0a71ef",
-                "reference": "0d57ef618b3b2d24650c57176d7c91b0bf0a71ef",
+                "url": "https://api.github.com/repos/LeCodeurDuDimanche/php-bluetooth/zipball/d13a8dd024e30b1bdb741d91f19818d1fe148afb",
+                "reference": "d13a8dd024e30b1bdb741d91f19818d1fe148afb",
                 "shasum": ""
             },
             "require": {
@@ -1233,7 +1233,7 @@
                 }
             ],
             "description": "Simple usage of bluetooth Bluez executables to control bluetooth devices with PHP",
-            "time": "2020-09-21T18:02:42+00:00"
+            "time": "2020-09-21T18:14:34+00:00"
         },
         {
             "name": "lecodeurdudimanche/php-unix-streams",
