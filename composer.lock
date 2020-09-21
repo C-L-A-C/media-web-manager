@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b92c146c36403765cc9cccfd25d324d",
+    "content-hash": "8679f7d3e055556d4ff94abbd0c01e5a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1200,17 +1200,11 @@
         },
         {
             "name": "lecodeurdudimanche/php-bluetooth",
-            "version": "v0.4.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/LeCodeurDuDimanche/php-bluetooth.git",
-                "reference": "d13a8dd024e30b1bdb741d91f19818d1fe148afb"
-            },
+            "version": "dev-master",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/LeCodeurDuDimanche/php-bluetooth/zipball/d13a8dd024e30b1bdb741d91f19818d1fe148afb",
-                "reference": "d13a8dd024e30b1bdb741d91f19818d1fe148afb",
-                "shasum": ""
+                "type": "path",
+                "url": "../php-bluetooth",
+                "reference": "e663f812d546cba8484186bb0b9a4e3f32acda34"
             },
             "require": {
                 "lecodeurdudimanche/php-unix-streams": "dev-master",
@@ -1222,7 +1216,6 @@
                     "lecodeurdudimanche\\PHPBluetooth\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1233,7 +1226,9 @@
                 }
             ],
             "description": "Simple usage of bluetooth Bluez executables to control bluetooth devices with PHP",
-            "time": "2020-09-21T18:14:34+00:00"
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "lecodeurdudimanche/php-unix-streams",
@@ -6639,7 +6634,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "lecodeurdudimanche/php-bluetooth": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
