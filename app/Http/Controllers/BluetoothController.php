@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use lecodeurdudimanche\PHPBluetooth\{Command, Manager};
+use lecodeurdudimanche\PHPBluetooth\{Command, Manager, Device};
 
 
 class BluetoothController extends Controller
@@ -28,6 +28,29 @@ class BluetoothController extends Controller
         $status = (new Command("HOME=$home pacmd list-sources"))->execute();
         var_dump($status);
         return ["isMuted" => false, "id" => -1];
+    }
+
+    public function doDeviceOperation(Request $request)
+    {
+        $data = $request->validate([
+            'action' => 'required|in:block,unblock,disconnect',
+            'mac' => 'required'
+        ]);
+
+        $this->manager = new Manager(true, true);
+
+        $device = new Device($data['mac']);
+        switch($data['action'])
+        {
+            case 'unblock':
+            case 'block':
+                $this->manager->blockDevice($device, $data['action'] == 'block');
+                break;
+            case 'disconnect':
+                $this->manager->connect($device, false);
+                break;
+        }
+        return response()->json(["error" => "no"]);
     }
 
     public function doMute(bool $mute) : void

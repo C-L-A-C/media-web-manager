@@ -11,6 +11,9 @@
         <title>Media center - Web manager</title>
     </head>
     <body class='bg-dark text-white'>
+        <div class='d-none api-resources'>
+            <span id="deviceOperationAPI" data-route="{{ route("bluetooth.deviceOperation") }}"></span>
+        </div>
         <div class='container p-4'>
             <h1 class='text-center'>Web manager</h1>
             <hr class='my-4 bg-light'>
@@ -50,7 +53,20 @@
                                 <div class='col-6 mb-2'>
                                     <div class='card'>
                                         <div class='card-body bg-not-so-dark'>
-                                            <div class='info-name'><span style='font-style:italic'>No name</span></div>
+                                            <div>
+                                                <span class='class-icons mr-2'>
+                                                    <i class='fas fa-mobile class-smartphone' style='display:none'></i>
+                                                    <i class='fas fa-phone-alt class-phone' style='display:none'></i>
+                                                    <i class='fas fa-usb class-peripheral' style='display:none'></i>
+                                                    <i class='fas fa-headphones-alt class-speaker' style='display:none'></i>
+                                                    <i class='fas fa-laptop class-computer' style='display:none'></i>
+                                                    <i class='fas fa-tv class-tv' style='display:none'></i>
+                                                    <i class='fas fa-question class-other' style='display:none'></i>
+                                                </span>
+                                                <span class='info-name'>
+                                                    <span style='font-style:italic'>No name</span>
+                                                </span>
+                                            </div>
                                             <small class='info-mac'></small>
                                         </div>
                                         <div class='card-footer icon-container text-dark' style='display:none'>
@@ -58,6 +74,19 @@
                                             <i class='fas fa-link info-paired mr-2' style='display:none' title='Paired'></i>
                                             <i class='fas fa-wifi info-connected mr-2' style='display:none' title='Connected'></i>
                                             <i class='fas fa-signal info-rssi mr-2' style='display:none'></i>
+                                            <span class='vr'></span>
+                                            <span>
+                                                <button class='btn btn-sm btn-outline-danger block-device' title='Block device'>
+                                                     <i class="fas fa-ban block-icon"></i>
+                                                     <i class='fas fa-check unblock-icon'></i>
+                                                </button>
+                                                <button class='btn btn-sm btn-outline-danger disconnect-device' title='Disconnect device' style="display:none">
+                                                    <div class='fa-stack fa-stack-small'>
+                                                        <i class='fas fa-wifi fa-stack-1x'></i>
+                                                        <i class='fas fa-slash fa-stack-1x'></i>
+                                                    </div>
+                                                </button>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>

@@ -64,6 +64,41 @@ function refreshDevicesList()
         });
 }
 
+function disconnectDevice(e)
+{
+    doApiCall("disconnect", e);
+}
+
+function blockDevice(e)
+{
+    doApiCall($(e.delegateTarget).data('blocked') === "yes" ? "unblock" : "block", e);
+}
+
+function doApiCall(action, event)
+{
+    let mac = $(event.delegateTarget).data("mac");
+    let route = $("#deviceOperationAPI").data("route");
+
+    fetch(route, {
+        method: "POST",
+        body: new URLSearchParams({
+            action:action,
+            mac: mac
+        })
+    })
+    .then(data => data.json())
+    .then(status => {
+        refreshDevicesList();
+        displayError(status.error);
+    })
+    .catch(error => displayError("server"));
+}
+
+function displayError(error)
+{
+    if (error != "no") alert("Error : " + error);
+}
+
 function displayDevices(devices)
 {
     $("#bt-devices-refresh-icon").hide();
@@ -81,20 +116,45 @@ function displayDevices(devices)
     {
         let deviceContainer = template.clone();
         deviceContainer.find(".info-mac").text(device.mac);
+        if (device.classname)
+            deviceContainer.find(".class-icons .class-" + device.classname).show();
         if (device.name)
             deviceContainer.find(".info-name").text(device.name);
         if (device.available)
             deviceContainer.find(".info-available").show();
         if (device.paired)
             deviceContainer.find(".info-paired").show();
-        if (device.connected)
+        if (device.connected) {
             deviceContainer.find(".info-connected").show();
+            deviceContainer.find(".disconnect-device").show().data("mac", device.mac).click(disconnectDevice);
+        }
         if (device.rssi)
             deviceContainer.find(".info-rssi").show().prop("title", "RSSI : " + device.rssi + " dBm");
 
         if (device.available || device.paired || devices.connected || device.paired)
             deviceContainer.find('.icon-container').show();
 
+        let blockButton = deviceContainer.find(".block-device");
+        let hideIcon = blockButton.find(".unblock-icon");
+        let showIcon = blockButton.find(".block-icon");
+
+        if (device.blocked)
+        {
+            let tmp = hideIcon;
+            hideIcon = showIcon;
+            showIcon = tmp;
+        }
+
+        hideIcon.hide();
+        showIcon.show();
+
+        blockButton
+            .addClass(device.blocked ? "btn-outline-success" : "btn-outline-danger")
+            .removeClass(device.blocked ? "btn-outline-danger" : "btn-outline-success")
+            .prop("title", (device.blocked ? "" : "Un") + "block device")
+            .data("mac", device.mac)
+            .data("blocked", device.blocked ? "yes" : "no")
+            .click(blockDevice);
         container.append(deviceContainer);
     }
 }

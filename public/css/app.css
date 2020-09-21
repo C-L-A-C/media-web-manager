@@ -14,3 +14,7 @@
 .bg-not-so-dark {
     background-color: #707580 !important
 }
+
+.fa-stack-small {
+    font-size:0.8em;
+}
