@@ -46,7 +46,25 @@
                             <div id='bt-devices-refresh-icon' class='ml-2' style='display:none'><img src='{{asset('img/loading.svg')}}' width="40"></img></div>
                         </div>
                         <div class='m-1'>
-                            <textarea id='bt-devices' data-route="{{ route('bluetooth.listDevices') }}" class='from-control w-100' disabled style="resize:none" rows="10"></textarea>
+                            <div id='bt-device-template' style="display:none">
+                                <div class='col-6 mb-2'>
+                                    <div class='card'>
+                                        <div class='card-body bg-not-so-dark'>
+                                            <div class='info-name'><span style='font-style:italic'>No name</span></div>
+                                            <small class='info-mac'></small>
+                                        </div>
+                                        <div class='card-footer icon-container text-dark' style='display:none'>
+                                            <i class='fas fa-broadcast-tower info-available mr-2' style='display:none' title='In range'></i>
+                                            <i class='fas fa-link info-paired mr-2' style='display:none' title='Paired'></i>
+                                            <i class='fas fa-wifi info-connected mr-2' style='display:none' title='Connected'></i>
+                                            <i class='fas fa-signal info-rssi mr-2' style='display:none'></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id='bt-devices' data-route="{{ route('bluetooth.listDevices') }}" class='row'>
+                                <div class='col'>No devices</div>
+                            </div>
                         </div>
                         <h3>Actions<h3>
                         <div class='m-1'>

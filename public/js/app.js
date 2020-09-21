@@ -58,28 +58,43 @@ function refreshDevicesList()
     fetch(route)
         .then(data => data.json())
         .then(displayDevices)
-        .catch(e => console.error(e));
+        .catch(e => {
+            console.error(e);
+            displayDevices(false);
+        });
 }
 
 function displayDevices(devices)
 {
     $("#bt-devices-refresh-icon").hide();
     let container = $("#bt-devices");
-    let text = "";
+
+    if (typeof devices.length === "undefined" || ! devices.length) {
+        container.html("<div class='col'>No devices</div>");
+        return;
+    }
+
+    let template = $("#bt-device-template>div");
+    container.html("");
+
     for (device of devices)
     {
-         text += device.mac;
+        let deviceContainer = template.clone();
+        deviceContainer.find(".info-mac").text(device.mac);
         if (device.name)
-            text += " (" + device.name + ")";
+            deviceContainer.find(".info-name").text(device.name);
         if (device.available)
-            text += ", in range";
+            deviceContainer.find(".info-available").show();
         if (device.paired)
-            text += ", paired";
+            deviceContainer.find(".info-paired").show();
         if (device.connected)
-            text += ", connected";
+            deviceContainer.find(".info-connected").show();
         if (device.rssi)
-            text += ", RSSI : " + device.rssi + " dBm";
-        text += "\n";
+            deviceContainer.find(".info-rssi").show().prop("title", "RSSI : " + device.rssi + " dBm");
+
+        if (device.available || device.paired || devices.connected || device.paired)
+            deviceContainer.find('.icon-container').show();
+
+        container.append(deviceContainer);
     }
-    container.val(text);
 }
