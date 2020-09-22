@@ -20,6 +20,7 @@ A2DP: https://wiki.debian.org/BluetoothUser/a2dp
 
 Pulse: https://askubuntu.com/questions/28176/how-do-i-run-pulseaudio-in-a-headless-server-installation
 
+HTTP doit être maitre du demon pulseaudio ?
 
 TODO:
 - Figure out if we need to autospawn or systemd/cron `pulseaudio -D`
@@ -28,5 +29,4 @@ TODO:
  - Retrieve currently playing file
  - Play local files (possible with pacmd)
  - Allow only one sink to be played at once
- - Add available devices, and name + RSSI of bluetooth Devices
- - Add action to devices
+ - Add filtering and pagitating to devices

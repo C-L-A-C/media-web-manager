@@ -18,3 +18,16 @@
 .fa-stack-small {
     font-size:0.8em;
 }
+
+.info-rssi {
+    position: relative;
+    display: inline-block;
+    line-height: 0.8em;
+}
+
+.signal-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+}

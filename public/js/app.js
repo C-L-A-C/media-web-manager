@@ -128,8 +128,21 @@ function displayDevices(devices)
             deviceContainer.find(".info-connected").show();
             deviceContainer.find(".disconnect-device").show().data("mac", device.mac).click(disconnectDevice);
         }
-        if (device.rssi)
-            deviceContainer.find(".info-rssi").show().prop("title", "RSSI : " + device.rssi + " dBm");
+        if (device.rssi) {
+            let RSSIMax = -40, RSSIMin = -100;
+            let nbBars = parseInt((device.rssi - RSSIMin) / (RSSIMax - RSSIMin) * 5);
+            nbBars = nbBars < 1 ? 1 : (nbBars > 5 ? 5 : nbBars);
+            let width = nbBars * 20;
+
+            deviceContainer
+                .find(".info-rssi")
+                .show()
+                .prop("title", "RSSI : " + device.rssi + " dBm");
+
+            deviceContainer
+                .find(".signal-overlay")
+                .css("width", width + "%");
+        }
 
         if (device.available || device.paired || devices.connected || device.paired)
             deviceContainer.find('.icon-container').show();

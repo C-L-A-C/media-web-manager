@@ -57,7 +57,7 @@
                                                 <span class='class-icons mr-2'>
                                                     <i class='fas fa-mobile class-smartphone' style='display:none'></i>
                                                     <i class='fas fa-phone-alt class-phone' style='display:none'></i>
-                                                    <i class='fas fa-usb class-peripheral' style='display:none'></i>
+                                                    <i class='fab fa-usb class-peripheral' style='display:none'></i>
                                                     <i class='fas fa-headphones-alt class-speaker' style='display:none'></i>
                                                     <i class='fas fa-laptop class-computer' style='display:none'></i>
                                                     <i class='fas fa-tv class-tv' style='display:none'></i>
@@ -70,10 +70,13 @@
                                             <small class='info-mac'></small>
                                         </div>
                                         <div class='card-footer icon-container text-dark' style='display:none'>
-                                            <i class='fas fa-broadcast-tower info-available mr-2' style='display:none' title='In range'></i>
+                                            <!-- <i class='fas fa-broadcast-tower info-available mr-2' style='display:none' title='In range'></i> -->
                                             <i class='fas fa-link info-paired mr-2' style='display:none' title='Paired'></i>
                                             <i class='fas fa-wifi info-connected mr-2' style='display:none' title='Connected'></i>
-                                            <i class='fas fa-signal info-rssi mr-2' style='display:none'></i>
+                                            <span class='info-rssi mr-2' title="Not in range">
+                                                    <i class="fas fa-signal text-muted"></i>
+                                                    <i class="fas fa-signal signal-overlay" style='width:0'></i>
+                                            </span>
                                             <span class='vr'></span>
                                             <span>
                                                 <button class='btn btn-sm btn-outline-danger block-device' title='Block device'>
