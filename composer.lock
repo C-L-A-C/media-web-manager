@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8679f7d3e055556d4ff94abbd0c01e5a",
+    "content-hash": "b3852ba2fddfd57e89acfb1f6dc8f407",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1201,10 +1201,16 @@
         {
             "name": "lecodeurdudimanche/php-bluetooth",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LeCodeurDuDimanche/php-bluetooth.git",
+                "reference": "eb002ecaf7fb81b2e708fdad114f358fb12637c4"
+            },
             "dist": {
-                "type": "path",
-                "url": "../php-bluetooth",
-                "reference": "e663f812d546cba8484186bb0b9a4e3f32acda34"
+                "type": "zip",
+                "url": "https://api.github.com/repos/LeCodeurDuDimanche/php-bluetooth/zipball/eb002ecaf7fb81b2e708fdad114f358fb12637c4",
+                "reference": "eb002ecaf7fb81b2e708fdad114f358fb12637c4",
+                "shasum": ""
             },
             "require": {
                 "lecodeurdudimanche/php-unix-streams": "dev-master",
@@ -1225,10 +1231,7 @@
                     "email": "adrien.duval.bonnet@gmail.com"
                 }
             ],
-            "description": "Simple usage of bluetooth Bluez executables to control bluetooth devices with PHP",
-            "transport-options": {
-                "relative": true
-            }
+            "description": "Simple usage of bluetooth Bluez executables to control bluetooth devices with PHP"
         },
         {
             "name": "lecodeurdudimanche/php-unix-streams",
