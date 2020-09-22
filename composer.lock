@@ -1222,6 +1222,7 @@
                     "lecodeurdudimanche\\PHPBluetooth\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1231,7 +1232,8 @@
                     "email": "adrien.duval.bonnet@gmail.com"
                 }
             ],
-            "description": "Simple usage of bluetooth Bluez executables to control bluetooth devices with PHP"
+            "description": "Simple usage of bluetooth Bluez executables to control bluetooth devices with PHP",
+            "time": "2020-09-22T12:40:43+00:00"
         },
         {
             "name": "lecodeurdudimanche/php-unix-streams",
