@@ -20,13 +20,25 @@ class BluetoothController extends Controller
     }
 
     //TODO: fix user permissions (launch PA service from http user ? manage to grant PA control to http user ?)
-    //TODO: Do regex search over the data
-    public function getPAStatus() : array
+    public function getPAStatus() : ?array
     {
         $home = env("SERVER_HOME", "/home/http");
-        (new Command("HOME=$home pulseaudio"))->execute();
+        (new Command("HOME=$home pulseaudio -D"))->execute();
         $status = (new Command("HOME=$home pacmd list-sources"))->execute();
-        var_dump($status);
+
+        if ($status["err"])
+            return null;
+
+        foreach(explode("index: ", $status["out"]) as $source) {
+            $index = intval($source);
+
+            //Check if source is a bluetooth device
+            if (preg_match("/bluez_source\..*\.a2dp_source/", $source)) {
+                    preg_match("/muted: ((?:yes)|(?:no))/", $source, $matches);
+                    $muted = $matches[1] == "yes";
+                    return ["isMuted" => $muted, "id" => $index];
+            }
+        }
         return ["isMuted" => false, "id" => -1];
     }
 
@@ -75,6 +87,12 @@ class BluetoothController extends Controller
     public function getStatus()
     {
         $data = $this->getPAStatus();
+
+        if ($data === false)
+            $data = ["error" => "pulseaudio"];
+        else
+            $data['error'] = "no";
+
         return response()->json($data);
     }
 }
