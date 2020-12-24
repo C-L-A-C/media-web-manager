@@ -5,10 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\{Storage, Collection};
-use App\{PlaylistEntry, ResourceDirectory};
+use App\{Configuration, ResourceDirectory};
+use lecodeurdudimanche\PHPPlayer\{Song, Manager};
 
 class MediaController extends Controller
 {
+    private $musicManager;
+
+    public function __construct()
+    {
+        $this->musicManager = new Manager(config("player.cache"));
+    }
+
     public function listFiles()
     {
         $dirs = ResourceDirectory::where('type', 'audio')->get();
@@ -22,21 +30,25 @@ class MediaController extends Controller
 
     public function getPlaylist()
     {
-        $playlist = PlaylistEntry::where('active', 1)->get();
-        return response()->json($playlist);
+        $status = $this->musicManager->syncPlaybackStatus();
+
+        return response()->json(['error' => 'no', 'data' => ['status' => $status, 'playingTime' => $status->getPlayingTime()]]);
     }
 
     public function addSong(Request $request)
     {
         $data = $request->validate([
-            'type' => ['required', 'string', Rule::in(PlaylistController::getTypes())],
-            'path' => 'required|string'
+            'type' => ['required', 'string', Rule::in(Song::AVAILABLE_TYPES)],
+            'uri' => 'required|string',
+            'pos' => 'nullable|int'
         ]);
 
-        $song = new PlaylistEntry($data);
-        $song->save();
+        //TODO: sanity check over uri to prevent local files scanning or server side request exploit
 
-        //Add event playlist_entry added
+        if (isset($data['pos']))
+            $this->musicManager->queueMusic($data['type'], $data['uri'], $data['pos']);
+        else
+            $this->musicManager->queueMusic($data['type'], $data['uri']);
 
         return response()->json(['error' => 'no']);
 
@@ -44,13 +56,32 @@ class MediaController extends Controller
 
     public function removeSong(Request $request)
     {
-        $data = $request->validate([
-            'id' => 'required|exists:playlist_entries'
-        ]);
-        PlaylistEntry::find($data['id']);
+        throw new \Exception("removeSong not implemented");
+    }
 
-        //Add event playlist_entry removed
+    public function setMode(Request $request)
+    {
+        $data = $request->validate(['mode' => 'required|in:bluetooth,playlist']);
+
+        Configuration::updateOrCreate(['name' => 'mode'], ['value' => $data['mode']]);
 
         return response()->json(['error' => 'no']);
     }
+
+    public function getMode(Request $request)
+    {
+        $mode = Configuration::findOrFail('mode');
+
+        return response()->json(['error' => 'no', 'mode' => $mode['value']]);
+    }
+
+    public function __call($name, $args)
+    {
+        if (in_array($name, ['doPlay', 'doPause', 'doNext', 'doPrev']))
+            $this->musicManager->{strtolower(substr($name, 2))}($args);
+        else
+            throw new \BadMethodCallException("La méthode MediaController@$name n'existe pas");
+
+    }
+
 }

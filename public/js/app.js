@@ -1,14 +1,14 @@
-var syncRoutineID = null;
+var btSyncRoutineID = null, playlistSyncRoutineID = null;
 
 $(document).ready(function(){
-
-    enableSyncronisation();
+    refreshMode();
+    refreshPlaylist();
 
     $("#sync-button").click(function(event) {
         let container = $(event.delegateTarget);
+        let shouldEnable = btSyncRoutineID === null;
         container.find(".icon-container").toggle();
-        let shouldEnable = syncRoutineID === null;
-        enableSyncronisation(shouldEnable);
+        enableBTSynchronisation(shouldEnable);
     });
 
     $("#bt-status-button").click(function(event) {
@@ -18,16 +18,129 @@ $(document).ready(function(){
         fetch(action, {method: "POST"});
     });
 
+    $("#song-add-form").submit(function(event) {
+        event.preventDefault();
+
+        let form = $(event.delegateTarget);
+        let type = form.find("#song-type").val();
+        let uri = form.find("#song-uri").val();
+
+        form[0].reset();
+
+        doApiCall(form.attr('action'), {type: type, uri: uri, pos: -1}, form.attr('method'), refreshPlaylist);
+    });
+
+    $("#checkbox-media").click(() =>  {changeMode("playlist"); });
+    $("#checkbox-bluetooth").click(() => {changeMode("bluetooth"); });
+
+    $(".playback-controls button").click(playbackAction);
+
+    $('#searchModal').on('show.bs.modal', function (event) {
+          $(this).find("#search-results").text("Recherche...");
+          youtubeSearch($("#song-uri").val(), displaySearchResults);
+    });
+
+    $('#song-type').change((event) => {
+        let type = $(event.delegateTarget).val();
+        if (type == 'youtube')
+            $("#searchModalButton").fadeIn(200);
+        else
+            $("#searchModalButton").fadeOut(200);
+    });
+
 });
 
-function enableSyncronisation(enable = true)
+function youtubeSearch(search, callback)
 {
-    if (enable)
-        syncRoutineID = setInterval(syncroniseData, 5000);
-    else if (syncRoutineID) {
-        clearInterval(syncRoutineID);
-        syncRoutineID = null;
+    let key = $("#youtubeAPI").data('key');
+    let url = "https://youtube.googleapis.com/youtube/v3/search?" + new URLSearchParams({
+        part : 'snippet', type : 'video', q : search, key : key
+    });
+    fetch(url, {
+            headers: {
+                'Accept' : 'application/json',
+                'Content-Type' : 'application/json'
+            }
+         })
+        .then(response => response.json())
+        .then(callback)
+        .catch(console.error);
+}
+
+function setSearchSelection(videoId)
+{
+    $("#searchModal").modal('hide');
+    $("#song-uri").val("https://www.youtube.com/watch?v=" + videoId);
+    $("#song-add-form").submit();
+}
+
+function displaySearchResults(data)
+{
+    let container = $("#search-results");
+    let template = $('#search-result-template>div');
+    container.html("");
+
+    for (video of data.items)
+    {
+        let videoData = video.snippet;
+        let videoContainer = template.clone();
+        videoContainer.find('.title').text(videoData.title);
+        videoContainer.find('.author').text(videoData.channelTitle);
+        videoContainer.find('.thumbnail').attr('src', videoData.thumbnails.default.url);
+        videoContainer.click((e) => setSearchSelection(video.id.videoId));
+        container.append(videoContainer);
     }
+}
+
+function playbackAction(event)
+{
+    let action = $(event.delegateTarget).data('route');
+    doApiCall(action, null, "POST", refreshPlaylist);
+}
+
+function enablePlaylistSynchronisation(enable = true)
+{
+    if (enable && !playlistSyncRoutineID)
+        playlistSyncRoutineID = setInterval(refreshPlaylist, 2000); //TODO: baisser ça et augmenter de maniere artificielle le compteur
+    else if (!enable && playlistSyncRoutineID)
+    {
+        clearInterval(playlistSyncRoutineID);
+        playlistSyncRoutineID = null;
+    }
+}
+
+function enableBTSynchronisation(enable = true)
+{
+    if (enable && !btSyncRoutineID)
+        btSyncRoutineID = setInterval(syncroniseData, 5000);
+    else if (!enable && btSyncRoutineID) {
+        clearInterval(btSyncRoutineID);
+        btSyncRoutineID = null;
+    }
+}
+
+function changeMode(mode)
+{
+    let setModeRoute = $("#changeModeAPI").data("set");
+    doApiCall(setModeRoute, {mode : mode}, "PUT", () => {
+        refreshMode();
+        refreshPlaylist();
+    });
+}
+
+function refreshMode()
+{
+    let getModeRoute = $("#changeModeAPI").data("get");
+    doApiCall(getModeRoute, null, "GET", (data) => {
+        if (data.error == "no")
+        {
+            $("#checkbox-bluetooth,#checkbox-media").prop("checked", false);
+            if (data.mode == "bluetooth")
+                $("#checkbox-bluetooth").prop("checked", true);
+            else if (data.mode == "playlist")
+                $("#checkbox-media").prop("checked", true);
+        }
+    });
 }
 
 function syncroniseData()
@@ -64,34 +177,84 @@ function refreshDevicesList()
         });
 }
 
+function refreshPlaylist()
+{
+    let route = $("#playlist-songs").data("route");
+    doApiCall(route, null, "GET", displayPlaylist);
+}
+
 function disconnectDevice(e)
 {
-    doApiCall("disconnect", e);
+    doBluetoothApiCall("disconnect", e);
 }
 
 function blockDevice(e)
 {
-    doApiCall($(e.delegateTarget).data('blocked') === "yes" ? "unblock" : "block", e);
+    doBluetoothApiCall($(e.delegateTarget).data('blocked') === "yes" ? "unblock" : "block", e);
 }
 
-function doApiCall(action, event)
+function doBluetoothApiCall(action, event)
 {
     let mac = $(event.delegateTarget).data("mac");
     let route = $("#deviceOperationAPI").data("route");
 
+    doApiCall(route, {action:action, mac: mac}, "POST", refreshDevicesList);
+}
+
+function doApiCall(route, data, method, done)
+{
     fetch(route, {
-        method: "POST",
-        body: new URLSearchParams({
-            action:action,
-            mac: mac
-        })
+        method: method,
+        body: data ? new URLSearchParams(data) : null
     })
     .then(data => data.json())
     .then(status => {
-        refreshDevicesList();
+        if (done) done(status);
         displayError(status.error);
     })
-    .catch(error => displayError("server"));
+    .catch(error => {
+        console.error(error);
+        displayError("server");
+    });
+}
+
+function timeStrFromSecs(secs)
+{
+    return parseInt(secs / 60) + ":" + (secs % 60 >= 10 ? "" : "0") + (secs % 60);
+}
+
+function displayPlaylist(res)
+{
+    let container = $("#playlist-songs");
+    let data = res.data.status;
+
+    if (res.error != "no" || typeof data.queue.length === "undefined" || ! data.queue.length) {
+        container.html("<div class='col-12'><em class='d-block m-auto'>No songs</em></div>");
+        return;
+    }
+
+    let template = $('#playlist-song-template>div');
+    container.html("");
+
+    let indice = 0;
+    for (song of data.queue)
+    {
+        let songTemplate = template.clone();
+        let length = parseInt(song.length ?? 0);
+        if (data.index == indice) {
+            songTemplate.addClass(".active");
+            songTemplate.find(data.playing ? ".icon-playing" : ".icon-paused").show();
+        }
+        songTemplate.find(".index").text(indice + 1);
+        songTemplate.find(".name").text(song.name != "undefined" ? song.name : song.uri);
+        songTemplate.find(".length").text((data.index == indice ? timeStrFromSecs(res.data.playingTime) + " / " : "") + timeStrFromSecs(song.length));
+        container.append(songTemplate);
+
+        indice++;
+    }
+
+    enablePlaylistSynchronisation(data.playing);
+
 }
 
 function displayError(error)

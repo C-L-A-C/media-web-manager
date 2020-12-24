@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use lecodeurdudimanche\PHPBluetooth\{Command, Manager, Device};
+use lecodeurdudimanche\PHPBluetooth\{Manager, Device};
+use lecodeurdudimanche\Processes\Command;
 
 
 class BluetoothController extends Controller
@@ -76,6 +77,17 @@ class BluetoothController extends Controller
     {
         $this->doMute(true);
         return response()->json(["error" => "no"]);
+    }
+
+    //TODO: arranger ça
+    public function doPause()
+    {
+        $this->doMute(true);
+    }
+
+    public function doPlay()
+    {
+        $this->doMute(false);
     }
 
     public function unmute()

@@ -3,17 +3,40 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\PlaylistEntry;
 
 class PlaylistController extends Controller
 {
-    public static function getTypes()
+    public function getPlaylist()
     {
-        return ['youtube', 'file'];
+        $playlist = PlaylistEntry::where('active', 1)->get();
+        return response()->json($playlist);
     }
 
-    public function playSong(PlaylistEntry $song)
+    public function addSong(Request $request)
     {
-        
+        $data = $request->validate([
+            'type' => ['required', 'string', Rule::in(PlaylistController::getTypes())],
+            'path' => 'required|string'
+        ]);
+
+        $song = new PlaylistEntry($data);
+        $song->save();
+
+        //Add event playlist_entry added
+
+        return response()->json(['error' => 'no']);
+
+    }
+
+    public function removeSong(Request $request)
+    {
+        $data = $request->validate([
+            'id' => 'required|exists:playlist_entries'
+        ]);
+        PlaylistEntry::find($data['id']);
+
+        //Add event playlist_entry removed
+
+        return response()->json(['error' => 'no']);
     }
 }

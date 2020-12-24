@@ -31,3 +31,8 @@
     top: 0;
     overflow: hidden;
 }
+
+.search-result .card-body:hover {
+    background-color: #007580 !important;
+    cursor: pointer;
+}
