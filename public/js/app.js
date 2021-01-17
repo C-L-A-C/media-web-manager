@@ -254,6 +254,8 @@ function displayPlaylist(res)
         indice++;
     }
 
+    container[0].scrollTo(0, container.children(0).outerHeight() * (data.index + 1));
+
     enablePlaylistSynchronisation(data.playing);
 
 }

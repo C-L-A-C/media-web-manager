@@ -32,7 +32,20 @@
     overflow: hidden;
 }
 
+#playlist-songs {
+    max-height: 60vh;
+    overflow-y: scroll;
+}
+
 .search-result .card-body:hover {
     background-color: #007580 !important;
     cursor: pointer;
+}
+
+.playback-controls {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid lightgray;
+    opacity: 0.9;
 }

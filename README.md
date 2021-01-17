@@ -26,7 +26,8 @@ TODO:
 - Figure out if we need to autospawn or systemd/cron `pulseaudio -D`
  - Resolve PA administration issues
  - Control bt playback https://scribles.net/controlling-bluetooth-audio-on-raspberry-pi/
- - Retrieve currently playing file
- - Play local files (possible with pacmd)
- - Allow only one sink to be played at once
+ - Retrieve currently playing bt file
  - Add filtering and pagitating to devices
+ - Add global ui for playin music
+ - Add scroller to local playlist
+ - Add option to recommend music based on music already played (https://github.com/lmeazzini/youtube-recommender)

@@ -78,7 +78,7 @@
                         </button>
                     </div>
                 </div>
-                <div class='col-12 col-md-6'>
+                <div class='col-12'>
                     <div class='section'>
                         <div class='row'>
                             <div class='col-10'>
@@ -111,7 +111,7 @@
                                         </div>
                                         <div class='col-12 col-md-5'>
                                             <label for='song-uri' class='d-md-none'>URL / Path</label>
-                                            <input id='song-uri' name='uri' class='form-control' placeholder='https://youtu.be/8HhwjIk89' required>
+                                            <input id='song-uri' name='uri' class='form-control' placeholder='URL / mots-clefs de recherche' required>
                                         </div>
                                         <div class='col-12 col-md-4'>
                                             <button class='btn btn-outline-primary mb-2' id='song-add'>Add</button>
@@ -148,7 +148,7 @@
                         </div>
                     </div>
                 </div>
-                <div class='col-12 col-md-6'>
+                <div class='col-12'>
                     <div class='section'>
                         <div class='row'>
                             <div class='col-10'>
@@ -221,20 +221,14 @@
                         </div>
                     </div>
                 </div>
-                <div class='col-12 col-md-6'>
-                    <div class='section'>
-                        <h2>Playback configuration</h2>
-                        <div class='row playback-controls mt-4'>
-                            <div class='col-12 d-flex justify-content-center'>
-                                <button class='btn btn-outline-secondary mx-1' data-route='{{ route('controls.previous') }}' title='Previous song'><i class='fas fa-backward'></i></button>
-                                <button class='btn btn-outline-secondary mx-1' data-route='{{ route('controls.resume') }}' title='Resume'><i class='fas fa-play'></i></button>
-                                <button class='btn btn-outline-secondary mx-1' data-route='{{ route('controls.pause') }}' title='Pause'><i class='fas fa-pause'></i></button>
-                                <button class='btn btn-outline-secondary mx-1'data-route='{{ route('controls.next') }}' title='Next song'><i class='fas fa-forward'></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+            </div>
+        </div>
+        <div class='playback-controls mt-4 bg-dark py-2'>
+            <div class='col-12 d-flex justify-content-center'>
+                <button class='btn btn-outline-secondary mx-1' data-route='{{ route('controls.previous') }}' title='Previous song'><i class='fas fa-backward'></i></button>
+                <button class='btn btn-outline-secondary mx-1' data-route='{{ route('controls.resume') }}' title='Resume'><i class='fas fa-play'></i></button>
+                <button class='btn btn-outline-secondary mx-1' data-route='{{ route('controls.pause') }}' title='Pause'><i class='fas fa-pause'></i></button>
+                <button class='btn btn-outline-secondary mx-1'data-route='{{ route('controls.next') }}' title='Next song'><i class='fas fa-forward'></i></button>
             </div>
         </div>
 
