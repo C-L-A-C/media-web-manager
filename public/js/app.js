@@ -84,10 +84,11 @@ function displaySearchResults(data)
     {
         let videoData = video.snippet;
         let videoContainer = template.clone();
+        videoContainer.data('videoId', video.id.videoId);
         videoContainer.find('.title').text(videoData.title);
         videoContainer.find('.author').text(videoData.channelTitle);
         videoContainer.find('.thumbnail').attr('src', videoData.thumbnails.default.url);
-        videoContainer.click((e) => setSearchSelection(video.id.videoId));
+        videoContainer.click((e) => setSearchSelection($(e.delegateTarget).data('videoId')));
         container.append(videoContainer);
     }
 }
