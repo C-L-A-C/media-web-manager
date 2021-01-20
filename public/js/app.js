@@ -25,9 +25,17 @@ $(document).ready(function(){
         let type = form.find("#song-type").val();
         let uri = form.find("#song-uri").val();
 
+        var contains = (string, c) => string.indexOf(c) != -1;
+        var looksLikeUrl = string => !contains(string, " ") && contains(string, ".") + contains(string, "/") + contains(string, "?") + contains(string, "wwww") + contains(string, "=") >= 2;
+
+        if (looksLikeUrl(uri))
+            doApiCall(form.attr('action'), {type: type, uri: uri, pos: -1}, form.attr('method'), refreshPlaylist);
+        else
+            youtubeSearch(uri, data => data.items && data.items.length ? setSearchSelection(data.items[0].id.videoId) : "no-op");
+
+
         form[0].reset();
 
-        doApiCall(form.attr('action'), {type: type, uri: uri, pos: -1}, form.attr('method'), refreshPlaylist);
     });
 
     $("#checkbox-media").click(() =>  {changeMode("playlist"); });
