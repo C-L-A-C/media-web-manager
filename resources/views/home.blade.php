@@ -118,6 +118,9 @@
                                             <button id='searchModalButton' type="button" class="btn btn-outline-primary mb-2" data-toggle="modal" data-target="#searchModal">
                                               Search
                                             </button>
+                                            <button id='updateScroll' type="button" class="btn btn-outline-secondary mb-2">
+                                              Scroll to current
+                                            </button>
 
                                         </div>
                                     </div>
@@ -135,7 +138,9 @@
                                                         <i class='icon-paused fas fa-pause' style='display:none'></i>
                                                     </div>
                                                     <div class='col-6 name'></div>
-                                                    <div class='col-4 length'></div>
+                                                    <div class='col-4 time-data'>
+                                                        <span class='time'></span><span class='length'></span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

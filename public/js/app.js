@@ -1,8 +1,9 @@
-var btSyncRoutineID = null, playlistSyncRoutineID = null;
+var btSyncRoutineID = null, playlistSyncRoutineID = null, updateTimeRoutineID = null;
 
 $(document).ready(function(){
     refreshMode();
     refreshPlaylist();
+    enablePlaylistSynchronisation();
 
     $("#sync-button").click(function(event) {
         let container = $(event.delegateTarget);
@@ -47,6 +48,8 @@ $(document).ready(function(){
           $(this).find("#search-results").text("Recherche...");
           youtubeSearch($("#song-uri").val(), displaySearchResults);
     });
+
+    $("#updateScroll").click(scrollToSong);
 
     $('#song-type').change((event) => {
         let type = $(event.delegateTarget).val();
@@ -107,15 +110,28 @@ function playbackAction(event)
     doApiCall(action, null, "POST", refreshPlaylist);
 }
 
+
+function enableSongTimeSynchronisation(enable = true)
+{
+        if (enable && !updateTimeRoutineID)
+            updateTimeRoutineID = setInterval(refreshTime, 1000);
+        else if (!enable && updateTimeRoutineID){
+            clearInterval(updateTimeRoutineID);
+            updateTimeRoutineID = null;
+        }
+}
+
 function enablePlaylistSynchronisation(enable = true)
 {
-    if (enable && !playlistSyncRoutineID)
-        playlistSyncRoutineID = setInterval(refreshPlaylist, 2000); //TODO: baisser ça et augmenter de maniere artificielle le compteur
+    if (enable && !playlistSyncRoutineID) {
+        playlistSyncRoutineID = setInterval(refreshPlaylist, 10000);
+    }
     else if (!enable && playlistSyncRoutineID)
     {
         clearInterval(playlistSyncRoutineID);
         playlistSyncRoutineID = null;
     }
+    enableSongTimeSynchronisation(enable);
 }
 
 function enableBTSynchronisation(enable = true)
@@ -156,6 +172,14 @@ function syncroniseData()
 {
     refreshDevicesList();
     refreshBluetoothStatus();
+}
+
+function refreshTime()
+{
+    let el = $("#playlist-songs .active");
+    let time = parseInt(el.data("playingTime")) + 1;
+    el.data("playingTime", time);
+    el.find(".time").text(timeStrFromSecs(time));
 }
 
 function refreshBluetoothStatus()
@@ -251,21 +275,26 @@ function displayPlaylist(res)
         let songTemplate = template.clone();
         let length = parseInt(song.length ?? 0);
         if (data.index == indice) {
-            songTemplate.addClass(".active");
+            songTemplate.addClass("active");
             songTemplate.find(data.playing ? ".icon-playing" : ".icon-paused").show();
         }
         songTemplate.find(".index").text(indice + 1);
         songTemplate.find(".name").text(song.name != "undefined" ? song.name : song.uri);
-        songTemplate.find(".length").text((data.index == indice ? timeStrFromSecs(res.data.playingTime) + " / " : "") + timeStrFromSecs(song.length));
+        songTemplate.data("playingTime", res.data.playingTime);
+        songTemplate.find(".time").text(data.index == indice ? timeStrFromSecs(res.data.playingTime) : "");
+        songTemplate.find(".length").text((data.index == indice ? " / " : "") + timeStrFromSecs(song.length));
         container.append(songTemplate);
 
         indice++;
     }
+    enableSongTimeSynchronisation(data.playing);
+}
 
-    container[0].scrollTo(0, container.children(0).outerHeight() * (data.index + 1));
-
-    enablePlaylistSynchronisation(data.playing);
-
+function scrollToSong()
+{
+    let container = $("#playlist-songs");
+    let playing = container.find(".active");
+    container.scrollTop(playing.position().top + container.scrollTop() - container.outerHeight() / 2);
 }
 
 function displayError(error)
