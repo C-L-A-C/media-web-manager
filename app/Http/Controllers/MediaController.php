@@ -14,7 +14,11 @@ class MediaController extends Controller
 
     public function __construct()
     {
+        //TODO: optimise that (done at each request)
         $this->musicManager = new Manager(config("player.cache"));
+
+        $this->musicManager->setConfigurationOption("format", config("player.format"));
+        $this->musicManager->setConfigurationOption("caching_time", config("player.caching_time"));
     }
 
     public function listFiles()
