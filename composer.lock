@@ -1330,12 +1330,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/LeCodeurDuDimanche/php-player.git",
-                "reference": "cd0477071ea25d8032ba6adc9893649a56922bfb"
+                "reference": "525954ea06b7427341b7d3cd9653543a1c077ff9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LeCodeurDuDimanche/php-player/zipball/cd0477071ea25d8032ba6adc9893649a56922bfb",
-                "reference": "cd0477071ea25d8032ba6adc9893649a56922bfb",
+                "url": "https://api.github.com/repos/LeCodeurDuDimanche/php-player/zipball/525954ea06b7427341b7d3cd9653543a1c077ff9",
+                "reference": "525954ea06b7427341b7d3cd9653543a1c077ff9",
                 "shasum": ""
             },
             "require": {
@@ -1365,7 +1365,7 @@
                 "issues": "https://github.com/LeCodeurDuDimanche/php-player/issues",
                 "source": "https://github.com/LeCodeurDuDimanche/php-player/tree/master"
             },
-            "time": "2021-01-28T23:15:43+00:00"
+            "time": "2021-02-01T21:06:58+00:00"
         },
         {
             "name": "lecodeurdudimanche/php-process-launcher",

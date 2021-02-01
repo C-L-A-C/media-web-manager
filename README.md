@@ -28,6 +28,5 @@ TODO:
  - Control bt playback https://scribles.net/controlling-bluetooth-audio-on-raspberry-pi/
  - Retrieve currently playing bt file
  - Add filtering and pagitating to devices
- - Add global ui for playin music
- - Add scroller to local playlist
+ - Add name and song status to global ui for playing music
  - Add option to recommend music based on music already played (https://github.com/lmeazzini/youtube-recommender)
