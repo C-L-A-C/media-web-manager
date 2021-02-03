@@ -178,8 +178,21 @@ function refreshTime()
 {
     let el = $("#playlist-songs .active");
     let time = parseInt(el.data("playingTime")) + 1;
+    let length = parseInt(el.data("length"));
+    if (time > length)
+    {
+        el.removeClass("active");
+        el.text("");
+        el.find(".length").text(timeStrFromSecs(parseInt(el.data("length"))));
+        el = el.next();
+        el.find(".length").text(" / " + el.find(".length").text());
+        el.addClass("active");
+        time = 0;
+    }
+
     el.data("playingTime", time);
     el.find(".time").text(timeStrFromSecs(time));
+
 }
 
 function refreshBluetoothStatus()
@@ -242,8 +255,8 @@ function doApiCall(route, data, method, done)
     })
     .then(data => data.json())
     .then(status => {
-        if (done) done(status);
-        displayError(status.error);
+        if (done && status.error == "no") done(status);
+        displayError(status.error, status.message);
     })
     .catch(error => {
         console.error(error);
@@ -280,7 +293,7 @@ function displayPlaylist(res)
         }
         songTemplate.find(".index").text(indice + 1);
         songTemplate.find(".name").text(song.name != "undefined" ? song.name : song.uri);
-        songTemplate.data("playingTime", res.data.playingTime);
+        songTemplate.data("playingTime", res.data.playingTime).data("length", song.length);
         songTemplate.find(".time").text(data.index == indice ? timeStrFromSecs(res.data.playingTime) : "");
         songTemplate.find(".length").text((data.index == indice ? " / " : "") + timeStrFromSecs(song.length));
         container.append(songTemplate);
@@ -297,9 +310,12 @@ function scrollToSong()
     container.scrollTop(playing.position().top + container.scrollTop() - container.outerHeight() / 2);
 }
 
-function displayError(error)
+function displayError(error, message = null)
 {
-    if (error != "no") alert("Error : " + error);
+    if (error != "no") {
+        let alert = $("#alert-box").fadeIn().find(".alert-text").text(message ? message : "Error : " + error);
+        $(document).scrollTop(0);
+    }
 }
 
 function displayDevices(devices)

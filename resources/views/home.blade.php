@@ -59,6 +59,12 @@
         <div class='container p-4'>
             <h1 class='text-center'>Web manager</h1>
             <hr class='my-4 bg-light'>
+            <div id='alert-box' class='my-4' style='display:none'>
+                <div class="alert alert-warning w-100 text-center">
+                    <i class='fas fa-exclamation-triangle mr-2'></i>
+                    <span class='alert-text'></span>
+                </div>
+            </div>
             <div class='info row'>
                 <div class='col-12'>
                     <div class='line-section'>

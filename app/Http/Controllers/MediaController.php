@@ -15,7 +15,13 @@ class MediaController extends Controller
     public function __construct()
     {
         //TODO: optimise that (done at each request)
-        $this->musicManager = new Manager(config("player.cache"));
+        try {
+            $this->musicManager = new Manager(config("player.cache"));
+        } catch(\Exception $e)
+        {
+            $this->musicManager = null;
+            return;
+        }
 
         $this->musicManager->setConfigurationOption("format", config("player.format"));
         $this->musicManager->setConfigurationOption("caching_time", config("player.caching_time"));
@@ -34,6 +40,9 @@ class MediaController extends Controller
 
     public function getPlaylist()
     {
+        //TODO: code duplique vrm pas ouf
+        if (!$this->musicManager)
+            return response()->json(['error' => 'critical', 'message' => 'Impossible de lancer le lecteur multimédia, le serveur a-t-il les droits nécéssaires ? (Il faut sûrement supprimer un ancien dossier /tmp/php-player)']);
         $status = $this->musicManager->syncPlaybackStatus();
 
         return response()->json(['error' => 'no', 'data' => ['status' => $status, 'playingTime' => $status->getPlayingTime()]]);
@@ -46,6 +55,9 @@ class MediaController extends Controller
             'uri' => 'required|string',
             'pos' => 'nullable|int'
         ]);
+
+        if (!$this->musicManager)
+            return response()->json(['error' => 'critical', 'message' => 'Impossible de lancer le lecteur multimédia, le serveur a-t-il les droits nécéssaires ? (Il faut sûrement supprimer un ancien dossier /tmp/php-player)']);
 
         //TODO: sanity check over uri to prevent local files scanning or server side request exploit
 
@@ -82,7 +94,11 @@ class MediaController extends Controller
     public function __call($name, $args)
     {
         if (in_array($name, ['doPlay', 'doPause', 'doNext', 'doPrev']))
+        {
+            if (!$this->musicManager)
+                return response()->json(['error' => 'critical', 'message' => 'Impossible de lancer le lecteur multimédia, le serveur a-t-il les droits nécéssaires ? (Il faut sûrement supprimer un ancien dossier /tmp/php-player)']);
             $this->musicManager->{strtolower(substr($name, 2))}($args);
+        }
         else
             throw new \BadMethodCallException("La méthode MediaController@$name n'existe pas");
 
